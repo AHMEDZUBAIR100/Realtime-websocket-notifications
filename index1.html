@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Notifications</title>
+</head>
+
+<body>
+
+    <h1>Real-Time Notifications</h1>
+
+    <input id="user_id" placeholder="Enter User ID">
+    <button onclick="connect()">Connect</button>
+
+    <br><br>
+
+    <input id="message" placeholder="Notification">
+    <button onclick="sendMessage()">Send</button>
+
+    <h2>Notifications</h2>
+
+    <div id="notifications"></div>
+
+
+    <script>
+
+        let socket;
+
+        function connect() {
+
+            const user_id =
+                document.getElementById("user_id").value;
+
+            socket = new WebSocket(
+                `ws://localhost:8000/ws/${user_id}`
+            );
+
+            socket.onmessage = function(event) {
+
+                const notification =
+                    document.createElement("p");
+
+                notification.innerText =
+                    "🔔 " + event.data;
+
+                document
+                    .getElementById("notifications")
+                    .appendChild(notification);
+            };
+        }
+
+
+        function sendMessage() {
+
+            const message =
+                document.getElementById("message").value;
+
+            socket.send(message);
+        }
+
+    </script>
+
+</body>
+
+</html>
